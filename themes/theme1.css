@@ -1,34 +1,21 @@
-/* theme1.css — Lavender Bliss */
-:root {
-  --bg:        #f5f2ff;
-  --text:       #4a3c6e;
-  --primary:    #c3b1e1;
-  --primary-soft: #d8c9f0;
-  --accent:     #a78bfa;
-  --surface:    #e9e3ff;
-  --surface-2:  #f0ebff;
+[data-color-mode="light"] {
+  --color-canvas-default:     #f5f2ff !important;
+  --color-canvas-subtle:      #e9e3ff !important;
+  --color-canvas-muted:       #f0ebff !important;
+  
+  --color-fg-default:         #4a3c6e !important;
+  --color-fg-muted:           #6b5a9b !important;
+  --color-fg-subtle:          #8c7ab9 !important;
+  
+  --color-accent-fg:          #a78bfa !important;
+  --color-accent-emphasis:    #7c3aed !important;
+  
+  --color-border-default:     #d8c9f0 !important;
+  --color-border-muted:       #c3b1e1 !important;
+  
+  --color-neutral-emphasis:   #e9e3ff !important;
 }
-
-* {
-  color: var(--text) !important;
+/* Фон всей страницы на всякий случай(да, я в душе не не уверен, что это будет работать на сайтах с более-менее развитой структорой) */
+body, .application-main, #js-repo-pjax-container {
+  background-color: #f5f2ff !important;
 }
-
-html, body {
-  background: var(--bg) !important;
-  background-color: var(--bg) !important;
-}
-
-a { color: var(--accent) !important; }
-a:hover { color: var(--primary) !important; }
-
-button, input, textarea, select {
-  background: var(--surface) !important;
-  border: 1px solid var(--primary-soft) !important;
-  color: var(--text) !important;
-}
-
-button:hover {
-  background: var(--primary) !important;
-}
-
-/* Много !important — это нормально для user-style */

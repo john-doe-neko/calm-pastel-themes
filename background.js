@@ -6,43 +6,46 @@ const THEMES = [
   "theme4.css",
   "theme5.css"
 ];
-
-const DEFAULT_THEME_INDEX = 0; // какая тема по умолчанию
+let currentThemeIndex = 0;
 
 browser.storage.local.get("selectedTheme", (data) => {
-  let index = data.selectedTheme ?? DEFAULT_THEME_INDEX;
-  updateContentScriptCSS(index);
+  currentThemeIndex = data.selectedTheme ?? 0;
+  applyTheme(currentThemeIndex);
 });
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.selectedTheme) {
-    updateContentScriptCSS(changes.selectedTheme.newValue);
+    currentThemeIndex = changes.selectedTheme.newValue;
+    applyTheme(currentThemeIndex);
   }
 });
 
-async function updateContentScriptCSS(themeIndex) {
-  // В MV3 нельзя динамически менять content_scripts css
-  // Поэтому самый простой и надёжный способ — перезагружать вкладки
-  // Альтернатива: использовать programmatic injection (ниже)
-
-  // Вариант 1 — самый простой (требует перезагрузки вкладки)
-  // browser.tabs.reload();
-
-  // Вариант 2 — инъекция без перезагрузки (рекомендую)
-  const themeFile = THEMES[themeIndex] || THEMES[0];
-
-  // Удаляем предыдущие инъекции (по возможности)
+async function applyTheme(index) {
+  const themeFile = THEMES[index] || THEMES[0];
+  
+  // Удаляем все предыдущие темы (чтобы не накапливались, а то потом с этим не разберёшься, я задолбался на кождую строку писать по3 новых)
   try {
     await browser.scripting.removeCSS({
       files: THEMES,
-      allFrames: true
+      target: { allFrames: true }
     });
-  } catch (e) {
-    // игнорируем, если стили ещё не были добавлены
-  }
+  } catch (e) {} // если не было — нормально
 
-  await browser.scripting.insertCSS({
-    files: [themeFile],
-    allFrames: true
-  });
+  // Вставляем новую
+  try {
+    await browser.scripting.insertCSS({
+      files: [themeFile],
+      target: { allFrames: true },
+      origin: "USER"   // ← важно! даёт приоритет выше авторских стилей сайта
+    });
+  } catch (err) {
+    console.error("Ошибка инъекции:", err);
+  }
 }
+
+// При смене вкладки или обновлении — тоже применяем (опционально,но я счиьаю что скорее необходимо)
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url?.includes('github.com')) {
+    applyTheme(currentThemeIndex);
+  }
+});
