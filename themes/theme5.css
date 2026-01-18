@@ -1,0 +1,7 @@
+/* theme5.css — Bluebell Fog */
+:root {
+  --bg:        #f0f9ff;
+  --text:       #1e3a5f;
+  --primary:    #bfdbfe;
+  --accent:     #60a5fa;
+}

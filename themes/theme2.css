@@ -1,0 +1,9 @@
+/* theme2.css — Fresh Mint */
+:root {
+  --bg:        #f0fdfa;
+  --text:       #1e4d4e;
+  --primary:    #99f6e4;
+  --primary-soft: #a7f3ed;
+  --accent:     #14b8a6;
+  --surface:    #ccfbf1;
+}

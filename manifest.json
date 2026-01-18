@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Pastel Dreams — 5 нежных тем",
+  "description": "Переключает между 5 красивыми пастельными темами для всех сайтов",
+  "version": "1.0",
+  "author": "nekodeff & Grok",
+  "icons": {
+    "48": "icon48.png",
+    "96": "icon96.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icon48.png"
+    }
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
